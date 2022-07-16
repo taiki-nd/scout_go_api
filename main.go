@@ -8,6 +8,7 @@ import (
 )
 
 func main() {
+	// log出力の有効化
 	utils.Logging(config.Config.LogFile)
 
 	log.Println("test_log")

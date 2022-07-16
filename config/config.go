@@ -14,6 +14,7 @@ type ConfigList struct {
 var Config ConfigList
 
 func init() {
+	// logファイルの読み込み
 	cfg, err := ini.Load("config/config.ini")
 	if err != nil {
 		log.Printf("failed to load config.ini: %v", err)
@@ -21,6 +22,7 @@ func init() {
 	}
 
 	Config = ConfigList{
+		// logファイル名の取得
 		LogFile: cfg.Section("scout_go").Key("log_file").String(),
 	}
 }
