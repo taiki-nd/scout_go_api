@@ -8,3 +8,6 @@ https://github.com/taiki-nd/scout_go_api/pull/2
 
 ## db接続
 https://github.com/taiki-nd/scout_go_api/pull/4
+
+## fiber導入
+https://github.com/taiki-nd/scout_go_api/pull/5
