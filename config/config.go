@@ -8,7 +8,13 @@ import (
 )
 
 type ConfigList struct {
-	LogFile string
+	LogFile  string
+	Sql      string
+	Host     string
+	Port     string
+	Name     string
+	User     string
+	Password string
 }
 
 var Config ConfigList
@@ -22,7 +28,12 @@ func init() {
 	}
 
 	Config = ConfigList{
-		// logファイル名の取得
-		LogFile: cfg.Section("scout_go").Key("log_file").String(),
+		LogFile:  cfg.Section("scout_go").Key("log_file").String(),
+		Sql:      cfg.Section("db").Key("sql").String(),
+		Host:     cfg.Section("db").Key("host").String(),
+		Port:     cfg.Section("db").Key("port").String(),
+		Name:     cfg.Section("db").Key("name").String(),
+		User:     cfg.Section("db").Key("user").String(),
+		Password: cfg.Section("db").Key("password").String(),
 	}
 }
