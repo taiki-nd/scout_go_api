@@ -9,8 +9,33 @@ import (
 	"github.com/taiki-nd/scout_go_api/models"
 )
 
+/*
+ * UsersIndex
+ * user一覧を取得
+ */
 func UsersIndex(c *fiber.Ctx) error {
-	return c.SendString("Hello, World 👋!")
+	log.Println("start to get users")
+
+	var users []*models.User
+
+	// usersレコードの取得
+	err := db.DB.Find(&users).Error
+	if err != nil {
+		log.Printf("db error: %v", err)
+		return c.JSON(fiber.Map{
+			"status":  false,
+			"code":    "failed_db_get_users",
+			"message": fmt.Sprintf("db error: %v", err),
+			"data":    users,
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"status":  true,
+		"code":    "success_user_index",
+		"message": "",
+		"data":    users,
+	})
 }
 
 /*
