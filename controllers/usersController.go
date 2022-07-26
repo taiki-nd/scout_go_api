@@ -7,6 +7,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/taiki-nd/scout_go_api/db"
 	"github.com/taiki-nd/scout_go_api/models"
+	"github.com/taiki-nd/scout_go_api/service"
 )
 
 /*
@@ -76,6 +77,35 @@ func UsersCreate(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{
 		"status":  true,
 		"code":    "success_user_create",
+		"message": "",
+		"data":    user,
+	})
+}
+
+/*
+ * UsersShow
+ * user詳細情報の取得
+ */
+func UsersShow(c *fiber.Ctx) error {
+	log.Println("start to get user")
+
+	user := service.GetUserFromId(c)
+
+	// userレコードの取得
+	err := db.DB.Find(&user).Error
+	if err != nil {
+		log.Printf("db error: %v", err)
+		return c.JSON(fiber.Map{
+			"status":  false,
+			"code":    "failed_db_user_show",
+			"message": fmt.Sprintf("db error: %v", err),
+			"data":    fiber.Map{},
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"status":  true,
+		"code":    "success_user_show",
 		"message": "",
 		"data":    user,
 	})
