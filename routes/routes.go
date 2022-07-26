@@ -13,4 +13,5 @@ func Routes(app *fiber.App) {
 		AllowOrigins: "*",
 	}))
 	app.Get("/", controllers.UsersIndex)
+	app.Post("/api/v1/users", controllers.UsersCreate)
 }
