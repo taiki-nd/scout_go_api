@@ -14,8 +14,6 @@ type User struct {
 	BirthYear      int       `json:"birth_year" gorm:"not null"`
 	BirthMonth     int       `json:"birth_month" gorm:"not null"`
 	BirthDay       int       `json:"birth_day" gorm:"not null"`
-	Password       []byte    `json:"-" gorm:"not null"`
-	WorkArea       string    `json:"work_area" gorm:"not null; size:256"`
 	AutoPermission bool      `json:"auto_permission"`
 	IsExample      bool      `json:"is_example" gorm:"not null; default:false"`
 	IsAdmin        bool      `json:"is_admin" gorm:"not null; default:false"`
