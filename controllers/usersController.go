@@ -51,11 +51,11 @@ func UsersCreate(c *fiber.Ctx) error {
 	// リクエストボディのパース
 	err := c.BodyParser(&user)
 	if err != nil {
-		log.Printf("POST method error: %v", err)
+		log.Printf("parse error: %v", err)
 		return c.JSON(fiber.Map{
 			"status":  false,
 			"code":    "failed_parse_user_create",
-			"message": fmt.Sprintf("POST method error: %v", err),
+			"message": fmt.Sprintf("parse error: %v", err),
 			"data":    fiber.Map{},
 		})
 	}
@@ -89,10 +89,8 @@ func UsersCreate(c *fiber.Ctx) error {
 func UsersShow(c *fiber.Ctx) error {
 	log.Println("start to get user")
 
-	user := service.GetUserFromId(c)
-
-	// userレコードの取得
-	err := db.DB.Find(&user).Error
+	// user情報の取得
+	user, err := service.GetUserFromId(c)
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
@@ -107,6 +105,57 @@ func UsersShow(c *fiber.Ctx) error {
 		"status":  true,
 		"code":    "success_user_show",
 		"message": "",
+		"data":    user,
+	})
+}
+
+/*
+ * UsersUpdate
+ * user情報の更新
+ */
+func UsersUpdate(c *fiber.Ctx) error {
+	log.Println("start to Update user")
+
+	// user情報の取得
+	user, err := service.GetUserFromId(c)
+	if err != nil {
+		log.Printf("db error: %v", err)
+		return c.JSON(fiber.Map{
+			"status":  false,
+			"code":    "failed_db_user_show",
+			"message": fmt.Sprintf("db error: %v", err),
+			"data":    fiber.Map{},
+		})
+	}
+
+	// リクエストボディのパース
+	err = c.BodyParser(&user)
+	if err != nil {
+		log.Printf("parse error: %v", err)
+		return c.JSON(fiber.Map{
+			"status":  false,
+			"code":    "failed_parse_user_update",
+			"message": fmt.Sprintf("parse error: %v", err),
+			"data":    fiber.Map{},
+		})
+	}
+
+	// user情報の更新
+	err = db.DB.Model(&user).Updates(user).Error
+	if err != nil {
+		log.Printf("db error: %v", err)
+		return c.JSON(fiber.Map{
+			"status":  false,
+			"code":    "failed_db_user_update",
+			"message": fmt.Sprintf("parse error: %v", err),
+			"data":    fiber.Map{},
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"status":  false,
+		"code":    "failed_db_user_update",
+		"message": fmt.Sprintf("db error: %v", err),
 		"data":    user,
 	})
 }

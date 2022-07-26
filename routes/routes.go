@@ -15,4 +15,5 @@ func Routes(app *fiber.App) {
 	app.Get("/api/v1/users", controllers.UsersIndex)
 	app.Post("/api/v1/users", controllers.UsersCreate)
 	app.Get("/api/v1/users/:id", controllers.UsersShow)
+	app.Put("/api/v1/users/:id", controllers.UsersUpdate)
 }
