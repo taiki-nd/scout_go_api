@@ -12,8 +12,10 @@ func Routes(app *fiber.App) {
 		AllowHeaders: "Content-Type, Content-Length, Authorization, Uid",
 		AllowOrigins: "*",
 	}))
+
 	app.Get("/api/v1/users", controllers.UsersIndex)
 	app.Post("/api/v1/users", controllers.UsersCreate)
 	app.Get("/api/v1/users/:id", controllers.UsersShow)
 	app.Put("/api/v1/users/:id", controllers.UsersUpdate)
+	app.Delete("/api/v1/users/:id", controllers.UsersDelete)
 }

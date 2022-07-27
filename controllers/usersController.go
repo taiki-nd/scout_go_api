@@ -153,9 +153,44 @@ func UsersUpdate(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(fiber.Map{
-		"status":  false,
+		"status":  true,
 		"code":    "failed_db_user_update",
 		"message": fmt.Sprintf("db error: %v", err),
 		"data":    user,
+	})
+}
+
+func UsersDelete(c *fiber.Ctx) error {
+	log.Println("start to delete user")
+
+	// user情報の取得
+	user, err := service.GetUserFromId(c)
+	if err != nil {
+		log.Printf("db error: %v", err)
+		return c.JSON(fiber.Map{
+			"status":  false,
+			"code":    "failed_db_user_show",
+			"message": fmt.Sprintf("db error: %v", err),
+			"data":    fiber.Map{},
+		})
+	}
+
+	// user情報の削除
+	err = db.DB.Delete(user).Error
+	if err != nil {
+		log.Printf("db error: %v", err)
+		return c.JSON(fiber.Map{
+			"status":  false,
+			"code":    "failed_db_user_delete",
+			"message": fmt.Sprintf("db error: %v", err),
+			"data":    fiber.Map{},
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"status":  false,
+		"code":    "success_user_delete",
+		"message": "",
+		"data":    fiber.Map{},
 	})
 }
