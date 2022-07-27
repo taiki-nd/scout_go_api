@@ -48,10 +48,10 @@ func UsersIndex(c *fiber.Ctx) error {
 func UsersCreate(c *fiber.Ctx) error {
 	log.Println("start to create user")
 
-	var user models.User
+	var userAssociation models.UserAssociation
 
 	// リクエストボディのパース
-	err := c.BodyParser(&user)
+	err := c.BodyParser(&userAssociation)
 	if err != nil {
 		log.Printf("parse error: %v", err)
 		return c.JSON(fiber.Map{
@@ -60,6 +60,25 @@ func UsersCreate(c *fiber.Ctx) error {
 			"message": fmt.Sprintf("parse error: %v", err),
 			"data":    fiber.Map{},
 		})
+	}
+
+	statuses := service.GetStatuses(userAssociation.Statuses)
+
+	user := models.User{
+		Uuid:           userAssociation.Uuid,
+		LastName:       userAssociation.LastName,
+		LastNameKana:   userAssociation.LastNameKana,
+		FirstName:      userAssociation.FirstName,
+		FirstNameKana:  userAssociation.FirstNameKana,
+		Nickname:       userAssociation.Nickname,
+		Sex:            userAssociation.Sex,
+		BirthYear:      userAssociation.BirthYear,
+		BirthMonth:     userAssociation.BirthMonth,
+		BirthDay:       userAssociation.BirthDay,
+		AutoPermission: userAssociation.AutoPermission,
+		IsExample:      userAssociation.IsExample,
+		IsAdmin:        userAssociation.IsAdmin,
+		Statuses:       statuses,
 	}
 
 	// レコード作成

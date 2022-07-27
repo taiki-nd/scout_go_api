@@ -22,3 +22,19 @@ func GetUserFromId(c *fiber.Ctx) (models.User, error) {
 	}
 	return user, nil
 }
+
+/*
+ * GetStatuses
+ * idからstatus情報を取得
+ * @params statusesIds
+ * @return []models.Status
+ */
+func GetStatuses(statusesIds []int) []models.Status {
+	statuses := make([]models.Status, len(statusesIds))
+	for i, statusId := range statusesIds {
+		statuses[i] = models.Status{
+			Id: uint(statusId),
+		}
+	}
+	return statuses
+}
