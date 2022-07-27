@@ -17,6 +17,7 @@ type User struct {
 	AutoPermission bool      `json:"auto_permission" gorm:"not null; default:false"`
 	IsExample      bool      `json:"is_example" gorm:"not null; default:false"`
 	IsAdmin        bool      `json:"is_admin" gorm:"not null; default:false"`
+	Statuses       []Status  `json:"statuses" gorm:"many2many:user_statuses"`
 	CreatedAt      time.Time `json:"created_at"`
 	UpdatedAt      time.Time `json:"updated_at`
 }
