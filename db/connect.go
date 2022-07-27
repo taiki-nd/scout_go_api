@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/taiki-nd/scout_go_api/config"
+	"github.com/taiki-nd/scout_go_api/models"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -30,5 +31,7 @@ func ConnectToDb() {
 
 	log.Printf("success db connection: %v", db)
 
-	db.AutoMigrate()
+	db.AutoMigrate(
+		&models.User{},
+	)
 }
