@@ -31,6 +31,8 @@ func UsersIndex(c *fiber.Ctx) error {
 		})
 	}
 
+	log.Println("success to get users")
+
 	return c.JSON(fiber.Map{
 		"status":  true,
 		"code":    "success_user_index",
@@ -101,6 +103,8 @@ func UsersShow(c *fiber.Ctx) error {
 		})
 	}
 
+	log.Printf("success to get users: %v", user.Nickname)
+
 	return c.JSON(fiber.Map{
 		"status":  true,
 		"code":    "success_user_show",
@@ -152,6 +156,8 @@ func UsersUpdate(c *fiber.Ctx) error {
 		})
 	}
 
+	log.Printf("success to update user: %v", user.Nickname)
+
 	return c.JSON(fiber.Map{
 		"status":  true,
 		"code":    "failed_db_user_update",
@@ -187,8 +193,10 @@ func UsersDelete(c *fiber.Ctx) error {
 		})
 	}
 
+	log.Printf("success to delete user: %v", user.Nickname)
+
 	return c.JSON(fiber.Map{
-		"status":  false,
+		"status":  true,
 		"code":    "success_user_delete",
 		"message": "",
 		"data":    fiber.Map{},
