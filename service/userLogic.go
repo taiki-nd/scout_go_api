@@ -16,7 +16,7 @@ import (
 func GetUserFromId(c *fiber.Ctx) (models.User, error) {
 	id, _ := strconv.Atoi(c.Params("id"))
 	var user models.User
-	err := db.DB.Where("id", id).First(&user).Error
+	err := db.DB.Preload("Statuses").Where("id", id).First(&user).Error
 	if err != nil {
 		return user, err
 	}
