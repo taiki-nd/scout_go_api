@@ -8,6 +8,7 @@ import (
 	"github.com/taiki-nd/scout_go_api/db"
 	"github.com/taiki-nd/scout_go_api/models"
 	"github.com/taiki-nd/scout_go_api/service"
+	"gorm.io/gorm"
 )
 
 /*
@@ -20,7 +21,7 @@ func UsersIndex(c *fiber.Ctx) error {
 	var users []*models.User
 
 	// usersレコードの取得
-	err := db.DB.Find(&users).Error
+	err := db.DB.Preload("Statuses").Find(&users).Error
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
@@ -49,6 +50,7 @@ func UsersCreate(c *fiber.Ctx) error {
 	log.Println("start to create user")
 
 	var userAssociation models.UserAssociation
+	log.Println(userAssociation)
 
 	// リクエストボディのパース
 	err := c.BodyParser(&userAssociation)
@@ -61,6 +63,8 @@ func UsersCreate(c *fiber.Ctx) error {
 			"data":    fiber.Map{},
 		})
 	}
+
+	log.Printf("user association:	%v", userAssociation.LastName)
 
 	statuses := service.GetStatuses(userAssociation.Statuses)
 
@@ -151,8 +155,10 @@ func UsersUpdate(c *fiber.Ctx) error {
 		})
 	}
 
+	var userAssociation models.UserAssociation
+
 	// リクエストボディのパース
-	err = c.BodyParser(&user)
+	err = c.BodyParser(&userAssociation)
 	if err != nil {
 		log.Printf("parse error: %v", err)
 		return c.JSON(fiber.Map{
@@ -163,14 +169,50 @@ func UsersUpdate(c *fiber.Ctx) error {
 		})
 	}
 
-	// user情報の更新
-	err = db.DB.Model(&user).Updates(user).Error
-	if err != nil {
-		log.Printf("db error: %v", err)
+	// transaction開始
+	errTransaction := db.DB.Transaction(func(tx *gorm.DB) error {
+		// アソシエーションの削除
+		errStatus := tx.Table("user_statuses").Where("user_id = ?", user.Id).Delete("").Error
+		if errStatus != nil {
+			log.Printf("db error: %v", errStatus)
+			return fmt.Errorf("db error: %v", errStatus)
+		}
+
+		// アソシエーションの更新
+		statuses := service.GetStatuses(userAssociation.Statuses)
+
+		userForUpdate := models.User{
+			Id:             user.Id,
+			Uuid:           userAssociation.Uuid,
+			LastName:       userAssociation.LastName,
+			LastNameKana:   userAssociation.LastNameKana,
+			FirstName:      userAssociation.FirstName,
+			FirstNameKana:  userAssociation.FirstNameKana,
+			Nickname:       userAssociation.Nickname,
+			Sex:            userAssociation.Sex,
+			BirthYear:      userAssociation.BirthYear,
+			BirthMonth:     userAssociation.BirthMonth,
+			BirthDay:       userAssociation.BirthDay,
+			AutoPermission: userAssociation.AutoPermission,
+			IsExample:      userAssociation.IsExample,
+			IsAdmin:        userAssociation.IsAdmin,
+			Statuses:       statuses,
+		}
+
+		// user情報の更新
+		err = tx.Model(&userForUpdate).Updates(userForUpdate).Error
+		if err != nil {
+			log.Printf("db error: %v", err)
+			return fmt.Errorf("db error: %v", errStatus)
+		}
+		return nil
+	})
+	if errTransaction != nil {
+		log.Println(errTransaction)
 		return c.JSON(fiber.Map{
 			"status":  false,
 			"code":    "failed_db_user_update",
-			"message": fmt.Sprintf("parse error: %v", err),
+			"message": fmt.Sprintf("db error: %v", errTransaction),
 			"data":    fiber.Map{},
 		})
 	}
@@ -179,12 +221,16 @@ func UsersUpdate(c *fiber.Ctx) error {
 
 	return c.JSON(fiber.Map{
 		"status":  true,
-		"code":    "failed_db_user_update",
-		"message": fmt.Sprintf("db error: %v", err),
-		"data":    user,
+		"code":    "success_user_update",
+		"message": "",
+		"data":    fiber.Map{},
 	})
 }
 
+/*
+ * UserDelete
+ * user情報の削除
+ */
 func UsersDelete(c *fiber.Ctx) error {
 	log.Println("start to delete user")
 
