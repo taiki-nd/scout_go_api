@@ -246,14 +246,29 @@ func UsersDelete(c *fiber.Ctx) error {
 		})
 	}
 
-	// user情報の削除
-	err = db.DB.Delete(user).Error
-	if err != nil {
-		log.Printf("db error: %v", err)
+	// transaction開始
+	errTransaction := db.DB.Transaction(func(tx *gorm.DB) error {
+		// アソシエーションの削除
+		errStatus := tx.Table("user_statuses").Where("user_id = ?", user.Id).Delete("").Error
+		if errStatus != nil {
+			log.Printf("db error: %v", errStatus)
+			return fmt.Errorf("db error: %v", errStatus)
+		}
+
+		// user情報の削除
+		err = tx.Delete(user).Error
+		if err != nil {
+			log.Printf("db error: %v", err)
+			return fmt.Errorf("db error: %v", err)
+		}
+		return nil
+	})
+	if errTransaction != nil {
+		log.Println(errTransaction)
 		return c.JSON(fiber.Map{
 			"status":  false,
-			"code":    "failed_db_user_delete",
-			"message": fmt.Sprintf("db error: %v", err),
+			"code":    "failed_db_user_update",
+			"message": fmt.Sprintf("db error: %v", errTransaction),
 			"data":    fiber.Map{},
 		})
 	}
