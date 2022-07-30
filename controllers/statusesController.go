@@ -160,12 +160,16 @@ func StatusesUpdate(c *fiber.Ctx) error {
 
 	return c.JSON(fiber.Map{
 		"status":  true,
-		"code":    "failed_db_status_update",
+		"code":    "success_status_update",
 		"message": fmt.Sprintf("db error: %v", err),
 		"data":    status,
 	})
 }
 
+/*
+ * StatusesDelete
+ * status情報の削除
+ */
 func StatusesDelete(c *fiber.Ctx) error {
 	log.Println("start to delete status")
 
