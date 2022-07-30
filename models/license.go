@@ -9,6 +9,7 @@ type License struct {
 	GetMonth  int       `json:"get_month" gorm:"not null"`
 	Public    bool      `json:"public" gorm:"not null; default:false"`
 	Publish   bool      `json:"publish" gorm:"not null; default:false"`
+	UserId    uint      `json:"user_id"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at`
 }
