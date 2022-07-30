@@ -16,7 +16,7 @@ import (
 func GetUserFromId(c *fiber.Ctx) (models.User, error) {
 	id, _ := strconv.Atoi(c.Params("id"))
 	var user models.User
-	err := db.DB.Preload("Statuses").Where("id", id).First(&user).Error
+	err := db.DB.Preload("Statuses").Preload("Prefectures").Where("id", id).First(&user).Error
 	if err != nil {
 		return user, err
 	}
@@ -37,4 +37,20 @@ func GetStatuses(statusesIds []int) []models.Status {
 		}
 	}
 	return statuses
+}
+
+/*
+ * Get prefectures
+ * idからprefecture情報を取得
+ * @params prefecturesIds
+ * @return []models.Prefecture
+ */
+func GetPrefectures(prefecturesIds []int) []models.Prefecture {
+	prefectures := make([]models.Prefecture, len(prefecturesIds))
+	for i, prefectureId := range prefecturesIds {
+		prefectures[i] = models.Prefecture{
+			Id: uint(prefectureId),
+		}
+	}
+	return prefectures
 }

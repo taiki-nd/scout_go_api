@@ -15,4 +15,5 @@ type UserAssociation struct {
 	IsExample      bool   `json:"is_example" gorm:"not null; default:false"`
 	IsAdmin        bool   `json:"is_admin" gorm:"not null; default:false"`
 	Statuses       []int  `json:"statuses" gorm:"many2many:user_statuses"`
+	Prefectures    []int  `json:"prefectures" gorm:"many2many:user_prefectures"`
 }

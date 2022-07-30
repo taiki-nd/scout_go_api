@@ -21,7 +21,7 @@ func UsersIndex(c *fiber.Ctx) error {
 	var users []*models.User
 
 	// usersレコードの取得
-	err := db.DB.Preload("Statuses").Find(&users).Error
+	err := db.DB.Preload("Statuses").Preload("Prefectures").Find(&users).Error
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
@@ -67,6 +67,7 @@ func UsersCreate(c *fiber.Ctx) error {
 	log.Printf("user association:	%v", userAssociation.LastName)
 
 	statuses := service.GetStatuses(userAssociation.Statuses)
+	prefectures := service.GetPrefectures(userAssociation.Prefectures)
 
 	user := models.User{
 		Uuid:           userAssociation.Uuid,
@@ -83,6 +84,7 @@ func UsersCreate(c *fiber.Ctx) error {
 		IsExample:      userAssociation.IsExample,
 		IsAdmin:        userAssociation.IsAdmin,
 		Statuses:       statuses,
+		Prefectures:    prefectures,
 	}
 
 	// レコード作成
@@ -177,9 +179,15 @@ func UsersUpdate(c *fiber.Ctx) error {
 			log.Printf("db error: %v", errStatus)
 			return fmt.Errorf("db error: %v", errStatus)
 		}
+		errPrefecture := tx.Table("user_prefectures").Where("user_id = ?", user.Id).Delete("").Error
+		if errPrefecture != nil {
+			log.Printf("db error: %v", errPrefecture)
+			return fmt.Errorf("db error: %v", errPrefecture)
+		}
 
 		// アソシエーションの更新
 		statuses := service.GetStatuses(userAssociation.Statuses)
+		prefectures := service.GetPrefectures(userAssociation.Prefectures)
 
 		userForUpdate := models.User{
 			Id:             user.Id,
@@ -197,6 +205,7 @@ func UsersUpdate(c *fiber.Ctx) error {
 			IsExample:      userAssociation.IsExample,
 			IsAdmin:        userAssociation.IsAdmin,
 			Statuses:       statuses,
+			Prefectures:    prefectures,
 		}
 
 		// user情報の更新
@@ -253,6 +262,11 @@ func UsersDelete(c *fiber.Ctx) error {
 		if errStatus != nil {
 			log.Printf("db error: %v", errStatus)
 			return fmt.Errorf("db error: %v", errStatus)
+		}
+		errPrefecture := tx.Table("user_prefectures").Where("user_id = ?", user.Id).Delete("").Error
+		if errPrefecture != nil {
+			log.Printf("db error: %v", errPrefecture)
+			return fmt.Errorf("db error: %v", errPrefecture)
 		}
 
 		// user情報の削除
