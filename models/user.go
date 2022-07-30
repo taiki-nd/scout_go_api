@@ -18,7 +18,7 @@ type User struct {
 	IsExample      bool         `json:"is_example" gorm:"not null; default:false"`
 	IsAdmin        bool         `json:"is_admin" gorm:"not null; default:false"`
 	Statuses       []Status     `json:"statuses" gorm:"many2many:user_statuses"`
-	Prefecture     []Prefecture `json:"prefectures" gorm:"many2many:user_prefectures"`
+	Prefectures    []Prefecture `json:"prefectures" gorm:"many2many:user_prefectures"`
 	CreatedAt      time.Time    `json:"created_at"`
 	UpdatedAt      time.Time    `json:"updated_at`
 }
