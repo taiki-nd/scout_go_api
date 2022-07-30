@@ -2,7 +2,7 @@ package models
 
 import "time"
 
-type Licenses struct {
+type License struct {
 	Id        uint      `json:"id" gorm:"primaryKey"`
 	Name      string    `json:"name" gorm:"not null; size:256"`
 	GetYear   int       `json:"get_year" gorm:"not null"`
