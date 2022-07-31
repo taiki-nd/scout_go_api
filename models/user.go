@@ -19,6 +19,7 @@ type User struct {
 	IsAdmin        bool         `json:"is_admin" gorm:"not null; default:false"`
 	Statuses       []Status     `json:"statuses" gorm:"many2many:user_statuses"`
 	Prefectures    []Prefecture `json:"prefectures" gorm:"many2many:user_prefectures"`
+	Licenses       []License    `json:"licenses" gorm:"foreignKey:UserId"`
 	CreatedAt      time.Time    `json:"created_at"`
 	UpdatedAt      time.Time    `json:"updated_at`
 }
