@@ -14,6 +14,7 @@ type UserAssociation struct {
 	AutoPermission bool   `json:"auto_permission" gorm:"not null; default:false"`
 	IsExample      bool   `json:"is_example" gorm:"not null; default:false"`
 	IsAdmin        bool   `json:"is_admin" gorm:"not null; default:false"`
-	Statuses       []int  `json:"statuses" gorm:"many2many:user_statuses"`
-	Prefectures    []int  `json:"prefectures" gorm:"many2many:user_prefectures"`
+	Statuses       []int  `json:"statuses"`
+	Prefectures    []int  `json:"prefectures"`
+	Licenses       []int  `json:"licenses"`
 }

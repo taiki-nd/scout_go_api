@@ -64,8 +64,6 @@ func UsersCreate(c *fiber.Ctx) error {
 		})
 	}
 
-	log.Printf("user association:	%v", userAssociation.LastName)
-
 	statuses := service.GetStatuses(userAssociation.Statuses)
 	prefectures := service.GetPrefectures(userAssociation.Prefectures)
 
@@ -267,6 +265,11 @@ func UsersDelete(c *fiber.Ctx) error {
 		if errPrefecture != nil {
 			log.Printf("db error: %v", errPrefecture)
 			return fmt.Errorf("db error: %v", errPrefecture)
+		}
+		errLicense := tx.Table("licenses").Where("user_id = ?", user.Id).Delete("").Error
+		if errLicense != nil {
+			log.Printf("db error: %v", errLicense)
+			return fmt.Errorf("db error: %v", errLicense)
 		}
 
 		// user情報の削除
