@@ -41,15 +41,13 @@ func GetUserFromUuid(uuid string) (models.User, error) {
  * userの管理情報を精査
  * @params user models.User
  */
-func CheckUserStatus(uuid string, user models.User) error {
+func CheckUserStatus(uuid string, userId uint) error {
 	// サインイン状態の確認
 	if uuid == "" {
 		log.Println("not signin")
 		return fmt.Errorf("not_signin")
 	}
 
-	log.Println(uuid)
-	log.Println(user.Uuid)
 	// admin権限の確認
 	signinUser, err := GetUserFromUuid(uuid)
 	if err != nil {
@@ -62,8 +60,7 @@ func CheckUserStatus(uuid string, user models.User) error {
 	}
 
 	// サインインユーザーの一致確認
-	log.Println(user.Id, signinUser.Id)
-	if user.Id == signinUser.Id {
+	if userId == signinUser.Id {
 		return nil
 	} else {
 		return fmt.Errorf("not match user")
