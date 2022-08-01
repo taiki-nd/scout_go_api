@@ -91,8 +91,10 @@ func LicensesCreate(c *fiber.Ctx) error {
 func LicensesShow(c *fiber.Ctx) error {
 	log.Println("start to get license")
 
+	id := c.Params("id")
+
 	// license情報の取得
-	license, err := service.GetLicenseFromId(c)
+	license, err := service.GetLicenseFromId(id)
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
@@ -120,14 +122,29 @@ func LicensesShow(c *fiber.Ctx) error {
 func LicensesUpdate(c *fiber.Ctx) error {
 	log.Println("start to Update license")
 
+	id := c.Params("id")
+	uuid := c.Query("uuid")
+
 	// license情報の取得
-	license, err := service.GetLicenseFromId(c)
+	license, err := service.GetLicenseFromId(id)
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
 			"license": false,
 			"code":    "failed_db_license_show",
 			"message": fmt.Sprintf("db error: %v", err),
+			"data":    fiber.Map{},
+		})
+	}
+
+	// userステータスの確認
+	err = service.CheckUserStatus(uuid, license.UserId)
+	if err != nil {
+		log.Printf("user stratus error: %v", err)
+		return c.JSON(fiber.Map{
+			"status":  false,
+			"code":    "user_status_error",
+			"message": fmt.Sprintf("user stratus error: %v", err),
 			"data":    fiber.Map{},
 		})
 	}
@@ -173,14 +190,29 @@ func LicensesUpdate(c *fiber.Ctx) error {
 func LicensesDelete(c *fiber.Ctx) error {
 	log.Println("start to delete license")
 
+	id := c.Params("id")
+	uuid := c.Query("uuid")
+
 	// license情報の取得
-	license, err := service.GetLicenseFromId(c)
+	license, err := service.GetLicenseFromId(id)
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
 			"license": false,
 			"code":    "failed_db_license_show",
 			"message": fmt.Sprintf("db error: %v", err),
+			"data":    fiber.Map{},
+		})
+	}
+
+	// userステータスの確認
+	err = service.CheckUserStatus(uuid, license.UserId)
+	if err != nil {
+		log.Printf("user stratus error: %v", err)
+		return c.JSON(fiber.Map{
+			"status":  false,
+			"code":    "user_status_error",
+			"message": fmt.Sprintf("user stratus error: %v", err),
 			"data":    fiber.Map{},
 		})
 	}
