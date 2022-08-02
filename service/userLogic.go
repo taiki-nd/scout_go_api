@@ -86,9 +86,9 @@ func CheckAdmin(uuid string) error {
 	}
 	if signinUser.IsAdmin {
 		return nil
+	} else {
+		return fmt.Errorf("user is not admin")
 	}
-
-	return nil
 }
 
 /*

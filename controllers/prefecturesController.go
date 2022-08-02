@@ -91,8 +91,10 @@ func PrefecturesCreate(c *fiber.Ctx) error {
 func PrefecturesShow(c *fiber.Ctx) error {
 	log.Println("start to get prefecture")
 
+	id := c.Params("id")
+
 	// prefecture情報の取得
-	prefecture, err := service.GetPrefectureFromId(c)
+	prefecture, err := service.GetPrefectureFromId(id)
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
@@ -120,14 +122,29 @@ func PrefecturesShow(c *fiber.Ctx) error {
 func PrefecturesUpdate(c *fiber.Ctx) error {
 	log.Println("start to Update prefecture")
 
+	id := c.Params("id")
+	uuid := c.Query("uuid")
+
 	// prefecture情報の取得
-	prefecture, err := service.GetPrefectureFromId(c)
+	prefecture, err := service.GetPrefectureFromId(id)
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
 			"prefecture": false,
 			"code":       "failed_db_prefecture_show",
 			"message":    fmt.Sprintf("db error: %v", err),
+			"data":       fiber.Map{},
+		})
+	}
+
+	// admin権限の確認
+	err = service.CheckAdmin(uuid)
+	if err != nil {
+		log.Printf("permission denied: %v", err)
+		return c.JSON(fiber.Map{
+			"prefecture": false,
+			"code":       "permission_error",
+			"message":    fmt.Sprintf("permission denied: %v", err),
 			"data":       fiber.Map{},
 		})
 	}
@@ -173,14 +190,29 @@ func PrefecturesUpdate(c *fiber.Ctx) error {
 func PrefecturesDelete(c *fiber.Ctx) error {
 	log.Println("start to delete prefecture")
 
+	id := c.Params("id")
+	uuid := c.Query("uuid")
+
 	// prefecture情報の取得
-	prefecture, err := service.GetPrefectureFromId(c)
+	prefecture, err := service.GetPrefectureFromId(id)
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
 			"prefecture": false,
 			"code":       "failed_db_prefecture_show",
 			"message":    fmt.Sprintf("db error: %v", err),
+			"data":       fiber.Map{},
+		})
+	}
+
+	// admin権限の確認
+	err = service.CheckAdmin(uuid)
+	if err != nil {
+		log.Printf("permission denied: %v", err)
+		return c.JSON(fiber.Map{
+			"prefecture": false,
+			"code":       "permission_error",
+			"message":    fmt.Sprintf("permission denied: %v", err),
 			"data":       fiber.Map{},
 		})
 	}
