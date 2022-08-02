@@ -48,10 +48,24 @@ func PrefecturesIndex(c *fiber.Ctx) error {
 func PrefecturesCreate(c *fiber.Ctx) error {
 	log.Println("start to create prefecture")
 
+	uuid := c.Query("uuid")
+
+	// admin権限の確認
+	err := service.CheckAdmin(uuid)
+	if err != nil {
+		log.Printf("permission denied: %v", err)
+		return c.JSON(fiber.Map{
+			"prefecture": false,
+			"code":       "permission_error",
+			"message":    fmt.Sprintf("permission denied: %v", err),
+			"data":       fiber.Map{},
+		})
+	}
+
 	var prefecture models.Prefecture
 
 	// リクエストボディのパース
-	err := c.BodyParser(&prefecture)
+	err = c.BodyParser(&prefecture)
 	if err != nil {
 		log.Printf("parse error: %v", err)
 		return c.JSON(fiber.Map{
