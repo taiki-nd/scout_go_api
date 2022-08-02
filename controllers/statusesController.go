@@ -48,10 +48,24 @@ func StatusesIndex(c *fiber.Ctx) error {
 func StatusesCreate(c *fiber.Ctx) error {
 	log.Println("start to create status")
 
+	uuid := c.Params("uuid")
+
+	// admin権限の確認
+	err := service.CheckAdmin(uuid)
+	if err != nil {
+		log.Printf("permission denied: %v", err)
+		return c.JSON(fiber.Map{
+			"prefecture": false,
+			"code":       "permission_error",
+			"message":    fmt.Sprintf("permission denied: %v", err),
+			"data":       fiber.Map{},
+		})
+	}
+
 	var status models.Status
 
 	// リクエストボディのパース
-	err := c.BodyParser(&status)
+	err = c.BodyParser(&status)
 	if err != nil {
 		log.Printf("parse error: %v", err)
 		return c.JSON(fiber.Map{
@@ -91,8 +105,10 @@ func StatusesCreate(c *fiber.Ctx) error {
 func StatusesShow(c *fiber.Ctx) error {
 	log.Println("start to get status")
 
+	id := c.Params("id")
+
 	// status情報の取得
-	status, err := service.GetStatusFromId(c)
+	status, err := service.GetStatusFromId(id)
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
@@ -120,8 +136,11 @@ func StatusesShow(c *fiber.Ctx) error {
 func StatusesUpdate(c *fiber.Ctx) error {
 	log.Println("start to Update status")
 
+	id := c.Params("id")
+	uuid := c.Query("uuid")
+
 	// status情報の取得
-	status, err := service.GetStatusFromId(c)
+	status, err := service.GetStatusFromId(id)
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
@@ -129,6 +148,18 @@ func StatusesUpdate(c *fiber.Ctx) error {
 			"code":    "failed_db_status_show",
 			"message": fmt.Sprintf("db error: %v", err),
 			"data":    fiber.Map{},
+		})
+	}
+
+	// admin権限の確認
+	err = service.CheckAdmin(uuid)
+	if err != nil {
+		log.Printf("permission denied: %v", err)
+		return c.JSON(fiber.Map{
+			"prefecture": false,
+			"code":       "permission_error",
+			"message":    fmt.Sprintf("permission denied: %v", err),
+			"data":       fiber.Map{},
 		})
 	}
 
@@ -173,8 +204,11 @@ func StatusesUpdate(c *fiber.Ctx) error {
 func StatusesDelete(c *fiber.Ctx) error {
 	log.Println("start to delete status")
 
+	id := c.Params("id")
+	uuid := c.Query("uuid")
+
 	// status情報の取得
-	status, err := service.GetStatusFromId(c)
+	status, err := service.GetStatusFromId(id)
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
@@ -182,6 +216,18 @@ func StatusesDelete(c *fiber.Ctx) error {
 			"code":    "failed_db_status_show",
 			"message": fmt.Sprintf("db error: %v", err),
 			"data":    fiber.Map{},
+		})
+	}
+
+	// admin権限の確認
+	err = service.CheckAdmin(uuid)
+	if err != nil {
+		log.Printf("permission denied: %v", err)
+		return c.JSON(fiber.Map{
+			"prefecture": false,
+			"code":       "permission_error",
+			"message":    fmt.Sprintf("permission denied: %v", err),
+			"data":       fiber.Map{},
 		})
 	}
 
