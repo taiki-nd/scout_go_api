@@ -1,9 +1,6 @@
 package service
 
 import (
-	"strconv"
-
-	"github.com/gofiber/fiber/v2"
 	"github.com/taiki-nd/scout_go_api/db"
 	"github.com/taiki-nd/scout_go_api/models"
 )
@@ -13,8 +10,7 @@ import (
  * idからlicense詳細情報を取得
  * @return models.License
  */
-func GetLicenseFromId(c *fiber.Ctx) (models.License, error) {
-	id, _ := strconv.Atoi(c.Params("id"))
+func GetLicenseFromId(id string) (models.License, error) {
 	var license models.License
 	err := db.DB.Where("id", id).First(&license).Error
 	if err != nil {

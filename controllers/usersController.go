@@ -114,8 +114,10 @@ func UsersCreate(c *fiber.Ctx) error {
 func UsersShow(c *fiber.Ctx) error {
 	log.Println("start to get user")
 
+	id := c.Params("id")
+
 	// user情報の取得
-	user, err := service.GetUserFromId(c)
+	user, err := service.GetUserFromId(id)
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
@@ -143,14 +145,29 @@ func UsersShow(c *fiber.Ctx) error {
 func UsersUpdate(c *fiber.Ctx) error {
 	log.Println("start to Update user")
 
+	id := c.Params("id")
+	uuid := c.Query("uuid")
+
 	// user情報の取得
-	user, err := service.GetUserFromId(c)
+	user, err := service.GetUserFromId(id)
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
 			"status":  false,
 			"code":    "failed_db_user_show",
 			"message": fmt.Sprintf("db error: %v", err),
+			"data":    fiber.Map{},
+		})
+	}
+
+	// userステータスの確認
+	err = service.CheckUserStatus(uuid, user.Id)
+	if err != nil {
+		log.Printf("user stratus error: %v", err)
+		return c.JSON(fiber.Map{
+			"status":  false,
+			"code":    "user_status_error",
+			"message": fmt.Sprintf("user stratus error: %v", err),
 			"data":    fiber.Map{},
 		})
 	}
@@ -241,14 +258,31 @@ func UsersUpdate(c *fiber.Ctx) error {
 func UsersDelete(c *fiber.Ctx) error {
 	log.Println("start to delete user")
 
+	id := c.Params("id")
+	uuid := c.Query("uuid")
+
+	log.Printf("uuid: %v", uuid)
+
 	// user情報の取得
-	user, err := service.GetUserFromId(c)
+	user, err := service.GetUserFromId(id)
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
 			"status":  false,
 			"code":    "failed_db_user_show",
 			"message": fmt.Sprintf("db error: %v", err),
+			"data":    fiber.Map{},
+		})
+	}
+
+	// userステータスの確認
+	err = service.CheckUserStatus(uuid, user.Id)
+	if err != nil {
+		log.Printf("user stratus error: %v", err)
+		return c.JSON(fiber.Map{
+			"status":  false,
+			"code":    "user_status_error",
+			"message": fmt.Sprintf("user stratus error: %v", err),
 			"data":    fiber.Map{},
 		})
 	}
