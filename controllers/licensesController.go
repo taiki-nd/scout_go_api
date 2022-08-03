@@ -24,7 +24,7 @@ func LicensesIndex(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
-			"license": false,
+			"status":  false,
 			"code":    "failed_db_get_licensees",
 			"message": fmt.Sprintf("db error: %v", err),
 			"data":    licenses,
@@ -34,7 +34,7 @@ func LicensesIndex(c *fiber.Ctx) error {
 	log.Println("success to get licenses")
 
 	return c.JSON(fiber.Map{
-		"license": true,
+		"status":  true,
 		"code":    "success_license_index",
 		"message": "",
 		"data":    licenses,
@@ -52,7 +52,7 @@ func LicensesCreate(c *fiber.Ctx) error {
 	if uuid == "" {
 		log.Println("not_signin")
 		return c.JSON(fiber.Map{
-			"school":  false,
+			"status":  false,
 			"code":    "not_signin",
 			"message": "please signin",
 			"data":    fiber.Map{},
@@ -66,7 +66,7 @@ func LicensesCreate(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("parse error: %v", err)
 		return c.JSON(fiber.Map{
-			"license": false,
+			"status":  false,
 			"code":    "failed_parse_license_create",
 			"message": fmt.Sprintf("parse error: %v", err),
 			"data":    fiber.Map{},
@@ -78,7 +78,7 @@ func LicensesCreate(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
-			"license": false,
+			"status":  false,
 			"code":    "failed_db_license_create",
 			"message": fmt.Sprintf("db error: %v", err),
 			"data":    fiber.Map{},
@@ -88,7 +88,7 @@ func LicensesCreate(c *fiber.Ctx) error {
 	log.Println("success to create license")
 
 	return c.JSON(fiber.Map{
-		"license": true,
+		"status":  true,
 		"code":    "success_license_create",
 		"message": "",
 		"data":    license,
@@ -109,7 +109,7 @@ func LicensesShow(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
-			"license": false,
+			"status":  false,
 			"code":    "failed_db_license_show",
 			"message": fmt.Sprintf("db error: %v", err),
 			"data":    fiber.Map{},
@@ -119,7 +119,7 @@ func LicensesShow(c *fiber.Ctx) error {
 	log.Printf("success to get licenses")
 
 	return c.JSON(fiber.Map{
-		"license": true,
+		"status":  true,
 		"code":    "success_license_show",
 		"message": "",
 		"data":    license,
@@ -141,7 +141,7 @@ func LicensesUpdate(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
-			"license": false,
+			"status":  false,
 			"code":    "failed_db_license_show",
 			"message": fmt.Sprintf("db error: %v", err),
 			"data":    fiber.Map{},
@@ -165,7 +165,7 @@ func LicensesUpdate(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("parse error: %v", err)
 		return c.JSON(fiber.Map{
-			"license": false,
+			"status":  false,
 			"code":    "failed_parse_license_update",
 			"message": fmt.Sprintf("parse error: %v", err),
 			"data":    fiber.Map{},
@@ -177,7 +177,7 @@ func LicensesUpdate(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
-			"license": false,
+			"status":  false,
 			"code":    "failed_db_license_update",
 			"message": fmt.Sprintf("parse error: %v", err),
 			"data":    fiber.Map{},
@@ -187,7 +187,7 @@ func LicensesUpdate(c *fiber.Ctx) error {
 	log.Println("success to update license")
 
 	return c.JSON(fiber.Map{
-		"license": true,
+		"status":  true,
 		"code":    "success_license_update",
 		"message": fmt.Sprintf("db error: %v", err),
 		"data":    license,
@@ -209,7 +209,7 @@ func LicensesDelete(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
-			"license": false,
+			"status":  false,
 			"code":    "failed_db_license_show",
 			"message": fmt.Sprintf("db error: %v", err),
 			"data":    fiber.Map{},
@@ -233,7 +233,7 @@ func LicensesDelete(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
-			"license": false,
+			"status":  false,
 			"code":    "failed_db_license_delete",
 			"message": fmt.Sprintf("db error: %v", err),
 			"data":    fiber.Map{},
@@ -243,7 +243,7 @@ func LicensesDelete(c *fiber.Ctx) error {
 	log.Println("success to delete license")
 
 	return c.JSON(fiber.Map{
-		"license": true,
+		"status":  true,
 		"code":    "success_license_delete",
 		"message": "",
 		"data":    fiber.Map{},

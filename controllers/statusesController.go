@@ -55,10 +55,10 @@ func StatusesCreate(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("permission denied: %v", err)
 		return c.JSON(fiber.Map{
-			"prefecture": false,
-			"code":       "permission_error",
-			"message":    fmt.Sprintf("permission denied: %v", err),
-			"data":       fiber.Map{},
+			"status":  false,
+			"code":    "permission_error",
+			"message": fmt.Sprintf("permission denied: %v", err),
+			"data":    fiber.Map{},
 		})
 	}
 
@@ -156,10 +156,10 @@ func StatusesUpdate(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("permission denied: %v", err)
 		return c.JSON(fiber.Map{
-			"prefecture": false,
-			"code":       "permission_error",
-			"message":    fmt.Sprintf("permission denied: %v", err),
-			"data":       fiber.Map{},
+			"status":  false,
+			"code":    "permission_error",
+			"message": fmt.Sprintf("permission denied: %v", err),
+			"data":    fiber.Map{},
 		})
 	}
 
@@ -224,10 +224,10 @@ func StatusesDelete(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("permission denied: %v", err)
 		return c.JSON(fiber.Map{
-			"prefecture": false,
-			"code":       "permission_error",
-			"message":    fmt.Sprintf("permission denied: %v", err),
-			"data":       fiber.Map{},
+			"status":  false,
+			"code":    "permission_error",
+			"message": fmt.Sprintf("permission denied: %v", err),
+			"data":    fiber.Map{},
 		})
 	}
 

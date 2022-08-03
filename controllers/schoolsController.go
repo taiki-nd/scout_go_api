@@ -19,7 +19,7 @@ func SchoolsIndex(c *fiber.Ctx) error {
 
 	var schools []*models.School
 
-	// schoolesレコードの取得
+	// schoolsレコードの取得
 	err := db.DB.Find(&schools).Error
 	if err != nil {
 		log.Printf("db error: %v", err)
