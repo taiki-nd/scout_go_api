@@ -48,6 +48,17 @@ func LicensesIndex(c *fiber.Ctx) error {
 func LicensesCreate(c *fiber.Ctx) error {
 	log.Println("start to create license")
 
+	uuid := c.Query("uuid")
+	if uuid == "" {
+		log.Println("not_signin")
+		return c.JSON(fiber.Map{
+			"school":  false,
+			"code":    "not_signin",
+			"message": "please signin",
+			"data":    fiber.Map{},
+		})
+	}
+
 	var license models.License
 
 	// リクエストボディのパース
