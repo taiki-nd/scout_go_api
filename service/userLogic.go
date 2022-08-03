@@ -15,7 +15,7 @@ import (
  */
 func GetUserFromId(id string) (models.User, error) {
 	var user models.User
-	err := db.DB.Preload("Statuses").Preload("Prefectures").Where("id", id).First(&user).Error
+	err := db.DB.Preload("Statuses").Preload("Prefectures").Preload("Schools").Where("id", id).First(&user).Error
 	if err != nil {
 		return user, err
 	}
