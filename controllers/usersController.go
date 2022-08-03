@@ -21,7 +21,7 @@ func UsersIndex(c *fiber.Ctx) error {
 	var users []*models.User
 
 	// usersレコードの取得
-	err := db.DB.Preload("Statuses").Preload("Prefectures").Find(&users).Error
+	err := db.DB.Preload("Statuses").Preload("Prefectures").Preload("Schools").Find(&users).Error
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
@@ -304,6 +304,11 @@ func UsersDelete(c *fiber.Ctx) error {
 		if errLicense != nil {
 			log.Printf("db error: %v", errLicense)
 			return fmt.Errorf("db error: %v", errLicense)
+		}
+		errSchool := tx.Table("schools").Where("user_id = ?", user.Id).Delete("").Error
+		if errSchool != nil {
+			log.Printf("db error: %v", errSchool)
+			return fmt.Errorf("db error: %v", errSchool)
 		}
 
 		// user情報の削除
