@@ -21,7 +21,7 @@ func UsersIndex(c *fiber.Ctx) error {
 	var users []*models.User
 
 	// usersレコードの取得
-	err := db.DB.Preload("Statuses").Preload("Prefectures").Preload("Schools").Find(&users).Error
+	err := db.DB.Preload("Statuses").Preload("Prefectures").Preload("Schools").Preload("Activities").Find(&users).Error
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
