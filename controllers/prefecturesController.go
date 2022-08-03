@@ -24,20 +24,20 @@ func PrefecturesIndex(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
-			"prefecture": false,
-			"code":       "failed_db_get_prefecturees",
-			"message":    fmt.Sprintf("db error: %v", err),
-			"data":       prefectures,
+			"status":  false,
+			"code":    "failed_db_get_prefecturees",
+			"message": fmt.Sprintf("db error: %v", err),
+			"data":    prefectures,
 		})
 	}
 
 	log.Println("success to get prefectures")
 
 	return c.JSON(fiber.Map{
-		"prefecture": true,
-		"code":       "success_prefecture_index",
-		"message":    "",
-		"data":       prefectures,
+		"status":  true,
+		"code":    "success_prefecture_index",
+		"message": "",
+		"data":    prefectures,
 	})
 }
 
@@ -55,10 +55,10 @@ func PrefecturesCreate(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("permission denied: %v", err)
 		return c.JSON(fiber.Map{
-			"prefecture": false,
-			"code":       "permission_error",
-			"message":    fmt.Sprintf("permission denied: %v", err),
-			"data":       fiber.Map{},
+			"status":  false,
+			"code":    "permission_error",
+			"message": fmt.Sprintf("permission denied: %v", err),
+			"data":    fiber.Map{},
 		})
 	}
 
@@ -69,10 +69,10 @@ func PrefecturesCreate(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("parse error: %v", err)
 		return c.JSON(fiber.Map{
-			"prefecture": false,
-			"code":       "failed_parse_prefecture_create",
-			"message":    fmt.Sprintf("parse error: %v", err),
-			"data":       fiber.Map{},
+			"status":  false,
+			"code":    "failed_parse_prefecture_create",
+			"message": fmt.Sprintf("parse error: %v", err),
+			"data":    fiber.Map{},
 		})
 	}
 
@@ -81,20 +81,20 @@ func PrefecturesCreate(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
-			"prefecture": false,
-			"code":       "failed_db_prefecture_create",
-			"message":    fmt.Sprintf("db error: %v", err),
-			"data":       fiber.Map{},
+			"status":  false,
+			"code":    "failed_db_prefecture_create",
+			"message": fmt.Sprintf("db error: %v", err),
+			"data":    fiber.Map{},
 		})
 	}
 
 	log.Println("success to create prefecture")
 
 	return c.JSON(fiber.Map{
-		"prefecture": true,
-		"code":       "success_prefecture_create",
-		"message":    "",
-		"data":       prefecture,
+		"status":  true,
+		"code":    "success_prefecture_create",
+		"message": "",
+		"data":    prefecture,
 	})
 }
 
@@ -112,20 +112,20 @@ func PrefecturesShow(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
-			"prefecture": false,
-			"code":       "failed_db_prefecture_show",
-			"message":    fmt.Sprintf("db error: %v", err),
-			"data":       fiber.Map{},
+			"status":  false,
+			"code":    "failed_db_prefecture_show",
+			"message": fmt.Sprintf("db error: %v", err),
+			"data":    fiber.Map{},
 		})
 	}
 
 	log.Printf("success to get prefectures")
 
 	return c.JSON(fiber.Map{
-		"prefecture": true,
-		"code":       "success_prefecture_show",
-		"message":    "",
-		"data":       prefecture,
+		"status":  true,
+		"code":    "success_prefecture_show",
+		"message": "",
+		"data":    prefecture,
 	})
 }
 
@@ -144,10 +144,10 @@ func PrefecturesUpdate(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
-			"prefecture": false,
-			"code":       "failed_db_prefecture_show",
-			"message":    fmt.Sprintf("db error: %v", err),
-			"data":       fiber.Map{},
+			"status":  false,
+			"code":    "failed_db_prefecture_show",
+			"message": fmt.Sprintf("db error: %v", err),
+			"data":    fiber.Map{},
 		})
 	}
 
@@ -156,10 +156,10 @@ func PrefecturesUpdate(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("permission denied: %v", err)
 		return c.JSON(fiber.Map{
-			"prefecture": false,
-			"code":       "permission_error",
-			"message":    fmt.Sprintf("permission denied: %v", err),
-			"data":       fiber.Map{},
+			"status":  false,
+			"code":    "permission_error",
+			"message": fmt.Sprintf("permission denied: %v", err),
+			"data":    fiber.Map{},
 		})
 	}
 
@@ -168,10 +168,10 @@ func PrefecturesUpdate(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("parse error: %v", err)
 		return c.JSON(fiber.Map{
-			"prefecture": false,
-			"code":       "failed_parse_prefecture_update",
-			"message":    fmt.Sprintf("parse error: %v", err),
-			"data":       fiber.Map{},
+			"status":  false,
+			"code":    "failed_parse_prefecture_update",
+			"message": fmt.Sprintf("parse error: %v", err),
+			"data":    fiber.Map{},
 		})
 	}
 
@@ -180,20 +180,20 @@ func PrefecturesUpdate(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
-			"prefecture": false,
-			"code":       "failed_db_prefecture_update",
-			"message":    fmt.Sprintf("parse error: %v", err),
-			"data":       fiber.Map{},
+			"status":  false,
+			"code":    "failed_db_prefecture_update",
+			"message": fmt.Sprintf("parse error: %v", err),
+			"data":    fiber.Map{},
 		})
 	}
 
 	log.Println("success to update prefecture")
 
 	return c.JSON(fiber.Map{
-		"prefecture": true,
-		"code":       "success_prefecture_update",
-		"message":    fmt.Sprintf("db error: %v", err),
-		"data":       prefecture,
+		"status":  true,
+		"code":    "success_prefecture_update",
+		"message": fmt.Sprintf("db error: %v", err),
+		"data":    prefecture,
 	})
 }
 
@@ -212,10 +212,10 @@ func PrefecturesDelete(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
-			"prefecture": false,
-			"code":       "failed_db_prefecture_show",
-			"message":    fmt.Sprintf("db error: %v", err),
-			"data":       fiber.Map{},
+			"status":  false,
+			"code":    "failed_db_prefecture_show",
+			"message": fmt.Sprintf("db error: %v", err),
+			"data":    fiber.Map{},
 		})
 	}
 
@@ -224,10 +224,10 @@ func PrefecturesDelete(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("permission denied: %v", err)
 		return c.JSON(fiber.Map{
-			"prefecture": false,
-			"code":       "permission_error",
-			"message":    fmt.Sprintf("permission denied: %v", err),
-			"data":       fiber.Map{},
+			"status":  false,
+			"code":    "permission_error",
+			"message": fmt.Sprintf("permission denied: %v", err),
+			"data":    fiber.Map{},
 		})
 	}
 
@@ -236,19 +236,19 @@ func PrefecturesDelete(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
-			"prefecture": false,
-			"code":       "failed_db_prefecture_delete",
-			"message":    fmt.Sprintf("db error: %v", err),
-			"data":       fiber.Map{},
+			"status":  false,
+			"code":    "failed_db_prefecture_delete",
+			"message": fmt.Sprintf("db error: %v", err),
+			"data":    fiber.Map{},
 		})
 	}
 
 	log.Println("success to delete prefecture")
 
 	return c.JSON(fiber.Map{
-		"prefecture": true,
-		"code":       "success_prefecture_delete",
-		"message":    "",
-		"data":       fiber.Map{},
+		"status":  true,
+		"code":    "success_prefecture_delete",
+		"message": "",
+		"data":    fiber.Map{},
 	})
 }
