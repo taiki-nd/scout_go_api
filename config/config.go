@@ -8,13 +8,16 @@ import (
 )
 
 type ConfigList struct {
-	LogFile  string
-	Sql      string
-	Host     string
-	Port     string
-	Name     string
-	User     string
-	Password string
+	LogFile       string
+	Sql           string
+	Host          string
+	Port          string
+	Name          string
+	User          string
+	Password      string
+	GcsBucketName string
+	GcsObjectPath string
+	GcsKeyPath    string
 }
 
 var Config ConfigList
@@ -28,12 +31,15 @@ func init() {
 	}
 
 	Config = ConfigList{
-		LogFile:  cfg.Section("scout_go").Key("log_file").String(),
-		Sql:      cfg.Section("db").Key("sql").String(),
-		Host:     cfg.Section("db").Key("host").String(),
-		Port:     cfg.Section("db").Key("port").String(),
-		Name:     cfg.Section("db").Key("name").String(),
-		User:     cfg.Section("db").Key("user").String(),
-		Password: cfg.Section("db").Key("password").String(),
+		LogFile:       cfg.Section("scout_go").Key("log_file").String(),
+		Sql:           cfg.Section("db").Key("sql").String(),
+		Host:          cfg.Section("db").Key("host").String(),
+		Port:          cfg.Section("db").Key("port").String(),
+		Name:          cfg.Section("db").Key("name").String(),
+		User:          cfg.Section("db").Key("user").String(),
+		Password:      cfg.Section("db").Key("password").String(),
+		GcsBucketName: cfg.Section("gcp").Key("gcs_bucket_name").String(),
+		GcsObjectPath: cfg.Section("gcp").Key("gcs_object_path").String(),
+		GcsKeyPath:    cfg.Section("gcp").Key("gcs_key_path").String(),
 	}
 }
