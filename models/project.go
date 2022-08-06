@@ -13,7 +13,7 @@ type Project struct {
 	Role      string    `json:"role" gorm:"not null; size:256"`
 	Public    bool      `json:"public" gorm:"not null; default:false"`
 	Publish   bool      `json:"publish" gorm:"not null; default:false"`
-	UserId    uint      `json:"user_id"`
+	WorkId    uint      `json:"work_id"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at`
 }

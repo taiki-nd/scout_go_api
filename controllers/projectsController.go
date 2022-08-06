@@ -149,7 +149,7 @@ func ProjectsUpdate(c *fiber.Ctx) error {
 	}
 
 	// userステータスの確認
-	err = service.CheckUserStatus(uuid, project.UserId)
+	err = service.CheckUserStatus(uuid, project.WorkId)
 	if err != nil {
 		log.Printf("user stratus error: %v", err)
 		return c.JSON(fiber.Map{
@@ -217,7 +217,7 @@ func ProjectsDelete(c *fiber.Ctx) error {
 	}
 
 	// userステータスの確認
-	err = service.CheckUserStatus(uuid, project.UserId)
+	err = service.CheckUserStatus(uuid, project.WorkId)
 	if err != nil {
 		log.Printf("user stratus error: %v", err)
 		return c.JSON(fiber.Map{
