@@ -8,6 +8,7 @@ import (
 	"github.com/taiki-nd/scout_go_api/db"
 	"github.com/taiki-nd/scout_go_api/models"
 	"github.com/taiki-nd/scout_go_api/service"
+	"gorm.io/gorm"
 )
 
 /*
@@ -20,11 +21,11 @@ func WorksIndex(c *fiber.Ctx) error {
 	var works []*models.Work
 
 	// worksレコードの取得
-	err := db.DB.Find(&works).Error
+	err := db.DB.Preload("Projects").Find(&works).Error
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
-			"work":    false,
+			"status":  false,
 			"code":    "failed_db_get_workes",
 			"message": fmt.Sprintf("db error: %v", err),
 			"data":    works,
@@ -34,7 +35,7 @@ func WorksIndex(c *fiber.Ctx) error {
 	log.Println("success to get works")
 
 	return c.JSON(fiber.Map{
-		"work":    true,
+		"status":  true,
 		"code":    "success_work_index",
 		"message": "",
 		"data":    works,
@@ -52,7 +53,7 @@ func WorksCreate(c *fiber.Ctx) error {
 	if uuid == "" {
 		log.Println("not_signin")
 		return c.JSON(fiber.Map{
-			"work":    false,
+			"status":  false,
 			"code":    "not_signin",
 			"message": "please signin",
 			"data":    fiber.Map{},
@@ -66,7 +67,7 @@ func WorksCreate(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("parse error: %v", err)
 		return c.JSON(fiber.Map{
-			"work":    false,
+			"status":  false,
 			"code":    "failed_parse_work_create",
 			"message": fmt.Sprintf("parse error: %v", err),
 			"data":    fiber.Map{},
@@ -78,7 +79,7 @@ func WorksCreate(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
-			"work":    false,
+			"status":  false,
 			"code":    "failed_db_work_create",
 			"message": fmt.Sprintf("db error: %v", err),
 			"data":    fiber.Map{},
@@ -88,7 +89,7 @@ func WorksCreate(c *fiber.Ctx) error {
 	log.Println("success to create work")
 
 	return c.JSON(fiber.Map{
-		"work":    true,
+		"status":  true,
 		"code":    "success_work_create",
 		"message": "",
 		"data":    work,
@@ -109,7 +110,7 @@ func WorksShow(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
-			"work":    false,
+			"status":  false,
 			"code":    "failed_db_work_show",
 			"message": fmt.Sprintf("db error: %v", err),
 			"data":    fiber.Map{},
@@ -119,7 +120,7 @@ func WorksShow(c *fiber.Ctx) error {
 	log.Printf("success to get works")
 
 	return c.JSON(fiber.Map{
-		"work":    true,
+		"status":  true,
 		"code":    "success_work_show",
 		"message": "",
 		"data":    work,
@@ -141,7 +142,7 @@ func WorksUpdate(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
-			"work":    false,
+			"status":  false,
 			"code":    "failed_db_work_show",
 			"message": fmt.Sprintf("db error: %v", err),
 			"data":    fiber.Map{},
@@ -165,7 +166,7 @@ func WorksUpdate(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("parse error: %v", err)
 		return c.JSON(fiber.Map{
-			"work":    false,
+			"status":  false,
 			"code":    "failed_parse_work_update",
 			"message": fmt.Sprintf("parse error: %v", err),
 			"data":    fiber.Map{},
@@ -177,7 +178,7 @@ func WorksUpdate(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
-			"work":    false,
+			"status":  false,
 			"code":    "failed_db_work_update",
 			"message": fmt.Sprintf("parse error: %v", err),
 			"data":    fiber.Map{},
@@ -187,7 +188,7 @@ func WorksUpdate(c *fiber.Ctx) error {
 	log.Println("success to update work")
 
 	return c.JSON(fiber.Map{
-		"work":    true,
+		"status":  true,
 		"code":    "success_work_update",
 		"message": fmt.Sprintf("db error: %v", err),
 		"data":    work,
@@ -209,7 +210,7 @@ func WorksDelete(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
-			"work":    false,
+			"status":  false,
 			"code":    "failed_db_work_show",
 			"message": fmt.Sprintf("db error: %v", err),
 			"data":    fiber.Map{},
@@ -228,14 +229,27 @@ func WorksDelete(c *fiber.Ctx) error {
 		})
 	}
 
-	// work情報の削除
-	err = db.DB.Delete(work).Error
-	if err != nil {
-		log.Printf("db error: %v", err)
+	// transaction開始
+	errTransaction := db.DB.Transaction(func(tx *gorm.DB) error {
+		errProject := tx.Table("projects").Where("work_id = ?", work.Id).Delete("").Error
+		if errProject != nil {
+			log.Printf("db error: %v", errProject)
+			return fmt.Errorf("db error: %v", errProject)
+		}
+		// work情報の削除
+		err = tx.Delete(work).Error
+		if err != nil {
+			log.Printf("db error: %v", err)
+			return fmt.Errorf("db error: %v", err)
+		}
+		return nil
+	})
+	if errTransaction != nil {
+		log.Println(errTransaction)
 		return c.JSON(fiber.Map{
-			"work":    false,
+			"status":  false,
 			"code":    "failed_db_work_delete",
-			"message": fmt.Sprintf("db error: %v", err),
+			"message": fmt.Sprintf("db error: %v", errTransaction),
 			"data":    fiber.Map{},
 		})
 	}
@@ -243,7 +257,7 @@ func WorksDelete(c *fiber.Ctx) error {
 	log.Println("success to delete work")
 
 	return c.JSON(fiber.Map{
-		"work":    true,
+		"status":  true,
 		"code":    "success_work_delete",
 		"message": "",
 		"data":    fiber.Map{},

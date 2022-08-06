@@ -17,6 +17,7 @@ type Work struct {
 	Public          bool      `json:"public" gorm:"not null; default:false"`
 	Publish         bool      `json:"publish" gorm:"not null; default:false"`
 	UserId          uint      `json:"user_id"`
+	Projects        []Project `json:"projects" gorm:"foreignKey:WorkId"`
 	CreatedAt       time.Time `json:"created_at"`
 	UpdatedAt       time.Time `json:"updated_at`
 }

@@ -12,7 +12,7 @@ import (
  */
 func GetWorkFromId(id string) (models.Work, error) {
 	var work models.Work
-	err := db.DB.Where("id", id).First(&work).Error
+	err := db.DB.Preload("Projects").Where("id", id).First(&work).Error
 	if err != nil {
 		return work, err
 	}
