@@ -10,7 +10,7 @@ type Work struct {
 	OutYear         int       `json:"out_year" gorm:"not null"`
 	OutMonth        int       `json:"out_month" gorm:"not null"`
 	BusinessContent string    `json:"business_content" gorm:"not null; size:256"`
-	EmployeeCount   string    `json:"employee_count" gorm:"not null; size:256"`
+	EmployeeCount   int       `json:"employee_count" gorm:"not null; size:256"`
 	EmployStyle     string    `json:"employ_style" gorm:"not null; size:256"`
 	WorkName        string    `json:"work_name" gorm:"not null; size:256"`
 	WorkContent     string    `json:"work_content" gorm:"not null; size:256"`
