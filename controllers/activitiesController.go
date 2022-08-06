@@ -3,8 +3,10 @@ package controllers
 import (
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/taiki-nd/scout_go_api/config"
 	"github.com/taiki-nd/scout_go_api/db"
 	"github.com/taiki-nd/scout_go_api/models"
 	"github.com/taiki-nd/scout_go_api/service"
@@ -226,6 +228,22 @@ func ActivitiesDelete(c *fiber.Ctx) error {
 			"message": fmt.Sprintf("user stratus error: %v", err),
 			"data":    fiber.Map{},
 		})
+	}
+
+	// imageの削除
+	if activity.ImageUrl != "" {
+		imageFileName := strings.Replace(activity.ImageUrl, config.Config.GcsObjectPath, "", -1)
+		fmt.Printf("image file name: %s", imageFileName)
+		err = ImageDelete(imageFileName)
+		if err != nil {
+			log.Printf("image delete error: %v", err)
+			return c.JSON(fiber.Map{
+				"status":  false,
+				"code":    "image_delete_error",
+				"message": fmt.Sprintf("image delete error: %v", err),
+				"data":    fiber.Map{},
+			})
+		}
 	}
 
 	// activity情報の削除
