@@ -341,7 +341,7 @@ func UsersDelete(c *fiber.Ctx) error {
 		log.Println(errTransaction)
 		return c.JSON(fiber.Map{
 			"status":  false,
-			"code":    "failed_db_user_update",
+			"code":    "failed_db_user_delete",
 			"message": fmt.Sprintf("db error: %v", errTransaction),
 			"data":    fiber.Map{},
 		})

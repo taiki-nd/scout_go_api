@@ -48,7 +48,7 @@ func StatusesIndex(c *fiber.Ctx) error {
 func StatusesCreate(c *fiber.Ctx) error {
 	log.Println("start to create status")
 
-	uuid := c.Params("uuid")
+	uuid := c.Query("uuid")
 
 	// admin権限の確認
 	err := service.CheckAdmin(uuid)
