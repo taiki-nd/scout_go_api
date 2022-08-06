@@ -22,6 +22,7 @@ type User struct {
 	Licenses       []License    `json:"licenses" gorm:"foreignKey:UserId"`
 	Schools        []School     `json:"schools" gorm:"foreignKey:UserId"`
 	Activities     []Activity   `json:"activities" gorm:"foreignKey:UserId"`
+	Works          []Work       `json:"works" gorm:"foreignKey:UserId"`
 	CreatedAt      time.Time    `json:"created_at"`
 	UpdatedAt      time.Time    `json:"updated_at`
 }
