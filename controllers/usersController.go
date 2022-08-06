@@ -315,6 +315,14 @@ func UsersDelete(c *fiber.Ctx) error {
 			log.Printf("db error: %v", errActivity)
 			return fmt.Errorf("db error: %v", errActivity)
 		}
+		var work_ids []int64
+		tx.Table("works").Where("user_id = ?", user.Id).Pluck("id", &work_ids)
+		if len(work_ids) != 0 {
+			err := tx.Table("projects").Where("work_id IN (?)", work_ids).Delete("").Error
+			if err != nil {
+				return fmt.Errorf("db error: %v", err)
+			}
+		}
 		errWork := tx.Table("works").Where("user_id = ?", user.Id).Delete("").Error
 		if errWork != nil {
 			log.Printf("db error: %v", errWork)
