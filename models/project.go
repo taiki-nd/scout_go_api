@@ -9,8 +9,8 @@ type Project struct {
 	InMonth   int       `json:"in_month" gorm:"not null"`
 	OutYear   int       `json:"out_year" gorm:"not null"`
 	OutMonth  int       `json:"out_month" gorm:"not null"`
-	Technique string    `json:"technique" gorm:"not null; size:256"`
-	Role      int       `json:"role" gorm:"not null; size:256"`
+	Technique string    `json:"technique" gorm:"not null"`
+	Role      string    `json:"role" gorm:"not null; size:256"`
 	Public    bool      `json:"public" gorm:"not null; default:false"`
 	Publish   bool      `json:"publish" gorm:"not null; default:false"`
 	UserId    uint      `json:"user_id"`
