@@ -54,7 +54,6 @@ func CheckUserStatus(uuid string, userId uint) error {
 		log.Println("db error: GetUserFromUuid()")
 		return fmt.Errorf("db error/ GetUserFromUuid()")
 	}
-	log.Println(signinUser.IsAdmin)
 	if signinUser.IsAdmin {
 		return nil
 	}
