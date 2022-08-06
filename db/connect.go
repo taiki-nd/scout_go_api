@@ -37,6 +37,7 @@ func ConnectToDb() {
 		&models.Prefecture{},
 		&models.School{},
 		&models.Status{},
+		&models.Project{},
 		&models.Work{},
 		&models.User{},
 	)
