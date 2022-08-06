@@ -32,13 +32,13 @@ func ConnectToDb() {
 	log.Printf("success db connection: %v", db)
 
 	db.AutoMigrate(
+		&models.User{},
+		&models.Work{},
 		&models.Activity{},
 		&models.License{},
 		&models.Prefecture{},
 		&models.School{},
 		&models.Status{},
 		&models.Project{},
-		&models.Work{},
-		&models.User{},
 	)
 }
