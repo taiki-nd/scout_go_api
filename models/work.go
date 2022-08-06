@@ -19,5 +19,5 @@ type Work struct {
 	UserId          uint      `json:"user_id"`
 	Projects        []Project `json:"projects" gorm:"foreignKey:WorkId"`
 	CreatedAt       time.Time `json:"created_at"`
-	UpdatedAt       time.Time `json:"updated_at`
+	UpdatedAt       time.Time `json:"updated_at"`
 }

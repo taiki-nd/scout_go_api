@@ -15,5 +15,5 @@ type Project struct {
 	Publish   bool      `json:"publish" gorm:"not null; default:false"`
 	WorkId    uint      `json:"work_id"`
 	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at`
+	UpdatedAt time.Time `json:"updated_at"`
 }
