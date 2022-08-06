@@ -34,6 +34,7 @@ func ConnectToDb() {
 	db.AutoMigrate(
 		&models.User{},
 		&models.Work{},
+		&models.Resume{},
 		&models.Activity{},
 		&models.License{},
 		&models.Prefecture{},
