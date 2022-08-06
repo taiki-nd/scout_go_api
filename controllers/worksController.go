@@ -20,7 +20,7 @@ func WorksIndex(c *fiber.Ctx) error {
 	var works []*models.Work
 
 	// worksレコードの取得
-	err := db.DB.Find(&works).Error
+	err := db.DB.Preload("Projects").Find(&works).Error
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
