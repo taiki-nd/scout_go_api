@@ -315,6 +315,11 @@ func UsersDelete(c *fiber.Ctx) error {
 			log.Printf("db error: %v", errActivity)
 			return fmt.Errorf("db error: %v", errActivity)
 		}
+		errWork := tx.Table("works").Where("user_id = ?", user.Id).Delete("").Error
+		if errWork != nil {
+			log.Printf("db error: %v", errWork)
+			return fmt.Errorf("db error: %v", errWork)
+		}
 
 		// user情報の削除
 		err = tx.Delete(user).Error
