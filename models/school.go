@@ -13,5 +13,5 @@ type School struct {
 	Publish   bool      `json:"publish" gorm:"not null; default:false"`
 	UserId    uint      `json:"user_id"`
 	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at`
+	UpdatedAt time.Time `json:"updated_at"`
 }
