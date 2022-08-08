@@ -10,8 +10,9 @@ type Resume struct {
 	PostalCode          string    `json:"postal_code" gorm:"not null; size:256"`
 	Tell                string    `json:"tell" gorm:"not null; size:256"`
 	Email               string    `json:"email" gorm:"not null; size:256"`
+	Line                string    `json:"line" gorm:"not null; size:256"`
 	Station             string    `json:"station" gorm:"not null; size:256"`
-	Family              string    `json:"family" gorm:"not null; size:256"`
+	Family              int       `json:"family" gorm:"not null; size:256"`
 	IsMarried           bool      `json:"is_married" gorm:"not null; default:false"`
 	IsMarriedObligation bool      `json:"is_married_obligation" gorm:"not null; default:false"`
 	IsMove              bool      `json:"is_ move" gorm:"not null; default:false"`

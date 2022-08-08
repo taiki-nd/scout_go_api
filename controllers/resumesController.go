@@ -8,7 +8,6 @@ import (
 	"github.com/taiki-nd/scout_go_api/db"
 	"github.com/taiki-nd/scout_go_api/models"
 	"github.com/taiki-nd/scout_go_api/service"
-	"gorm.io/gorm"
 )
 
 /*
@@ -21,7 +20,7 @@ func ResumesIndex(c *fiber.Ctx) error {
 	var resumes []*models.Resume
 
 	// resumesレコードの取得
-	err := db.DB.Preload("Projects").Find(&resumes).Error
+	err := db.DB.Find(&resumes).Error
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
@@ -229,27 +228,14 @@ func ResumesDelete(c *fiber.Ctx) error {
 		})
 	}
 
-	// transaction開始
-	errTransaction := db.DB.Transaction(func(tx *gorm.DB) error {
-		errProject := tx.Table("projects").Where("resume_id = ?", resume.Id).Delete("").Error
-		if errProject != nil {
-			log.Printf("db error: %v", errProject)
-			return fmt.Errorf("db error: %v", errProject)
-		}
-		// resume情報の削除
-		err = tx.Delete(resume).Error
-		if err != nil {
-			log.Printf("db error: %v", err)
-			return fmt.Errorf("db error: %v", err)
-		}
-		return nil
-	})
-	if errTransaction != nil {
-		log.Println(errTransaction)
+	// resume情報の削除
+	err = db.DB.Delete(resume).Error
+	if err != nil {
+		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
 			"status":  false,
-			"code":    "failed_db_resume_delete",
-			"message": fmt.Sprintf("db error: %v", errTransaction),
+			"code":    "failed_db_school_delete",
+			"message": fmt.Sprintf("db error: %v", err),
 			"data":    fiber.Map{},
 		})
 	}

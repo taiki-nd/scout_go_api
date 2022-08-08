@@ -12,7 +12,7 @@ import (
  */
 func GetResumeFromId(id string) (models.Resume, error) {
 	var resume models.Resume
-	err := db.DB.Preload("Projects").Where("id", id).First(&resume).Error
+	err := db.DB.Where("id", id).First(&resume).Error
 	if err != nil {
 		return resume, err
 	}
