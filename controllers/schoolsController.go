@@ -24,7 +24,7 @@ func SchoolsIndex(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
-			"school":  false,
+			"status":  false,
 			"code":    "failed_db_get_schooles",
 			"message": fmt.Sprintf("db error: %v", err),
 			"data":    schools,
@@ -34,7 +34,7 @@ func SchoolsIndex(c *fiber.Ctx) error {
 	log.Println("success to get schools")
 
 	return c.JSON(fiber.Map{
-		"school":  true,
+		"status":  true,
 		"code":    "success_school_index",
 		"message": "",
 		"data":    schools,
@@ -52,7 +52,7 @@ func SchoolsCreate(c *fiber.Ctx) error {
 	if uuid == "" {
 		log.Println("not_signin")
 		return c.JSON(fiber.Map{
-			"school":  false,
+			"status":  false,
 			"code":    "not_signin",
 			"message": "please signin",
 			"data":    fiber.Map{},
@@ -66,7 +66,7 @@ func SchoolsCreate(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("parse error: %v", err)
 		return c.JSON(fiber.Map{
-			"school":  false,
+			"status":  false,
 			"code":    "failed_parse_school_create",
 			"message": fmt.Sprintf("parse error: %v", err),
 			"data":    fiber.Map{},
@@ -78,7 +78,7 @@ func SchoolsCreate(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
-			"school":  false,
+			"status":  false,
 			"code":    "failed_db_school_create",
 			"message": fmt.Sprintf("db error: %v", err),
 			"data":    fiber.Map{},
@@ -88,7 +88,7 @@ func SchoolsCreate(c *fiber.Ctx) error {
 	log.Println("success to create school")
 
 	return c.JSON(fiber.Map{
-		"school":  true,
+		"status":  true,
 		"code":    "success_school_create",
 		"message": "",
 		"data":    school,
@@ -109,7 +109,7 @@ func SchoolsShow(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
-			"school":  false,
+			"status":  false,
 			"code":    "failed_db_school_show",
 			"message": fmt.Sprintf("db error: %v", err),
 			"data":    fiber.Map{},
@@ -119,7 +119,7 @@ func SchoolsShow(c *fiber.Ctx) error {
 	log.Printf("success to get schools")
 
 	return c.JSON(fiber.Map{
-		"school":  true,
+		"status":  true,
 		"code":    "success_school_show",
 		"message": "",
 		"data":    school,
@@ -141,7 +141,7 @@ func SchoolsUpdate(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
-			"school":  false,
+			"status":  false,
 			"code":    "failed_db_school_show",
 			"message": fmt.Sprintf("db error: %v", err),
 			"data":    fiber.Map{},
@@ -165,7 +165,7 @@ func SchoolsUpdate(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("parse error: %v", err)
 		return c.JSON(fiber.Map{
-			"school":  false,
+			"status":  false,
 			"code":    "failed_parse_school_update",
 			"message": fmt.Sprintf("parse error: %v", err),
 			"data":    fiber.Map{},
@@ -177,7 +177,7 @@ func SchoolsUpdate(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
-			"school":  false,
+			"status":  false,
 			"code":    "failed_db_school_update",
 			"message": fmt.Sprintf("parse error: %v", err),
 			"data":    fiber.Map{},
@@ -187,7 +187,7 @@ func SchoolsUpdate(c *fiber.Ctx) error {
 	log.Println("success to update school")
 
 	return c.JSON(fiber.Map{
-		"school":  true,
+		"status":  true,
 		"code":    "success_school_update",
 		"message": fmt.Sprintf("db error: %v", err),
 		"data":    school,
@@ -209,7 +209,7 @@ func SchoolsDelete(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
-			"school":  false,
+			"status":  false,
 			"code":    "failed_db_school_show",
 			"message": fmt.Sprintf("db error: %v", err),
 			"data":    fiber.Map{},
@@ -233,7 +233,7 @@ func SchoolsDelete(c *fiber.Ctx) error {
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
-			"school":  false,
+			"status":  false,
 			"code":    "failed_db_school_delete",
 			"message": fmt.Sprintf("db error: %v", err),
 			"data":    fiber.Map{},
@@ -243,7 +243,7 @@ func SchoolsDelete(c *fiber.Ctx) error {
 	log.Println("success to delete school")
 
 	return c.JSON(fiber.Map{
-		"school":  true,
+		"status":  true,
 		"code":    "success_school_delete",
 		"message": "",
 		"data":    fiber.Map{},
