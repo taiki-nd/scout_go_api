@@ -361,3 +361,30 @@ func UsersDelete(c *fiber.Ctx) error {
 		"data":    fiber.Map{},
 	})
 }
+
+/*
+ * UserFromUuid
+ * Uuidからuser情報を取得
+ */
+func UserFromUuid(c *fiber.Ctx) error {
+	uuid := c.Query("uuid")
+
+	// user情報の取得
+	_, err := service.GetUserFromUuid(uuid)
+	if err != nil {
+		log.Printf("db error: %v", err)
+		return c.JSON(fiber.Map{
+			"status":  false,
+			"code":    "failed_get_user_from_uuid",
+			"message": fmt.Sprintf("db error: %v", err),
+			"data":    fiber.Map{},
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"status":  true,
+		"code":    "success_get_user_from_uuid",
+		"message": "",
+		"data":    fiber.Map{},
+	})
+}

@@ -21,6 +21,8 @@ func Routes(app *fiber.App) {
 	app.Put("/api/v1/users/:id", controllers.UsersUpdate)
 	app.Delete("/api/v1/users/:id", controllers.UsersDelete)
 
+	app.Get("/api/v1/get_user_from_uuid", controllers.UserFromUuid)
+
 	app.Get("/api/v1/statuses", controllers.StatusesIndex)
 	app.Post("/api/v1/statuses", controllers.StatusesCreate)
 	app.Get("/api/v1/statuses/:id", controllers.StatusesShow)
