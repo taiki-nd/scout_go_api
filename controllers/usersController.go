@@ -370,7 +370,7 @@ func UserFromUuid(c *fiber.Ctx) error {
 	uuid := c.Query("uuid")
 
 	// user情報の取得
-	_, err := service.GetUserFromUuid(uuid)
+	user, err := service.GetUserFromUuid(uuid)
 	if err != nil {
 		log.Printf("db error: %v", err)
 		return c.JSON(fiber.Map{
@@ -385,6 +385,6 @@ func UserFromUuid(c *fiber.Ctx) error {
 		"status":  true,
 		"code":    "success_get_user_from_uuid",
 		"message": "",
-		"data":    fiber.Map{},
+		"data":    user.Id,
 	})
 }
